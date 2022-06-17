@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'dart:math';
+
 
 void main() async {
   await Firebase.initializeApp (
@@ -35,13 +35,6 @@ class _ArticleDescription extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.ingredient1,
-    required this.ingredient2,
-    required this.ingredient3,
-    required this.ingredient4,
-    required this.ingredient5,
-    required this.ingredient6,
-    required this.ingredient7,
-    required this.ingredient8,
     required this.publishDate,
     required this.poorDuration,
   }) : super(key: key);
@@ -49,13 +42,6 @@ class _ArticleDescription extends StatelessWidget {
   final String title;
   final String subtitle;
   final String ingredient1;
-  final String ingredient2;
-  final String ingredient3;
-  final String ingredient4;
-  final String ingredient5;
-  final String ingredient6;
-  final String ingredient7;
-  final String ingredient8;
   final String publishDate;
   final String poorDuration;
 
@@ -119,30 +105,18 @@ class _ArticleDescription extends StatelessWidget {
 class CustomListItemTwo extends StatelessWidget {
   const CustomListItemTwo({
     Key? key,
+    required this.thumbnail,
     required this.title,
     required this.subtitle,
     required this.ingredient1,
-    required this.ingredient2,
-    required this.ingredient3,
-    required this.ingredient4,
-    required this.ingredient5,
-    required this.ingredient6,
-    required this.ingredient7,
-    required this.ingredient8,
     required this.publishDate,
     required this.poorDuration,
   }) : super(key: key);
 
+  final Widget thumbnail;
   final String title;
   final String subtitle;
   final String ingredient1;
-  final String ingredient2;
-  final String ingredient3;
-  final String ingredient4;
-  final String ingredient5;
-  final String ingredient6;
-  final String ingredient7;
-  final String ingredient8;
   final String publishDate;
   final String poorDuration;
 
@@ -167,9 +141,9 @@ class CustomListItemTwo extends StatelessWidget {
                 child: _ArticleDescription(
                   title: title,
                   subtitle: subtitle,
-                  author: author,
+                  ingredient1: ingredient1,
                   publishDate: publishDate,
-                  poorDuration: readDuration,
+                  poorDuration: poorDuration,
                 ),
               ),
             )
@@ -195,9 +169,9 @@ class MyStatelessWidget extends StatelessWidget {
           title: 'Flutter 1.0 Launch',
           subtitle: 'Flutter continues to improve and expand its horizons. '
               'This text should max out at two lines and clip',
-          author: 'Dash',
+          ingredient1: 'Dash',
           publishDate: 'Dec 28',
-          readDuration: '5 mins',
+          poorDuration: '5 mins',
         ),
         CustomListItemTwo(
           thumbnail: Container(
@@ -205,9 +179,9 @@ class MyStatelessWidget extends StatelessWidget {
           ),
           title: 'Flutter 1.2 Release - Continual updates to the framework',
           subtitle: 'Flutter once again improves and makes updates.',
-          author: 'Flutter',
+          ingredient1: 'Flutter',
           publishDate: 'Feb 26',
-          readDuration: '12 mins',
+          poorDuration: '12 mins',
         ),
       ],
     );
