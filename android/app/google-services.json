@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "711538673552",
+    "project_id": "manhattan-project-2ec9d",
+    "storage_bucket": "manhattan-project-2ec9d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:711538673552:android:7083797325d0b24c169515",
+        "android_client_info": {
+          "package_name": "com.example.manhattan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "711538673552-vdqd77s6dvtce8v19v9gk9b7qa5drqh4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZ0WqyD994i1n5LkTtFakKKj23s9uuaRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "711538673552-vdqd77s6dvtce8v19v9gk9b7qa5drqh4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
