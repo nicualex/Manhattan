@@ -29,7 +29,7 @@ Widget build(BuildContext context) {
             color: Colors.white54,
           ),
           Text(
-            'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not available'}.',
+            'Bluetooth Adapter is ${state != null ? state.toString().substring(15) : 'not  available'}.',
           ),
         ],
       ),

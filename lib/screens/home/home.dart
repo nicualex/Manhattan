@@ -15,7 +15,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('My App'),
+        title: Text('Home stuff'),
         actions: <Widget>[
           IconButton(
             icon: Icon(
