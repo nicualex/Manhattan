@@ -23,7 +23,10 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        return ios;
+        throw UnsupportedError(
+          'DefaultFirebaseOptions have not been configured for ios - '
+          'you can reconfigure this by running the FlutterFire CLI again.',
+        );
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -52,6 +55,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '711538673552',
     projectId: 'manhattan-project-2ec9d',
     authDomain: 'manhattan-project-2ec9d.firebaseapp.com',
+    databaseURL: 'https://manhattan-project-2ec9d-default-rtdb.firebaseio.com',
     storageBucket: 'manhattan-project-2ec9d.appspot.com',
     measurementId: 'G-59J7PX824W',
   );
@@ -61,16 +65,7 @@ class DefaultFirebaseOptions {
     appId: '1:711538673552:android:7083797325d0b24c169515',
     messagingSenderId: '711538673552',
     projectId: 'manhattan-project-2ec9d',
+    databaseURL: 'https://manhattan-project-2ec9d-default-rtdb.firebaseio.com',
     storageBucket: 'manhattan-project-2ec9d.appspot.com',
-  );
-
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCUQUFc6QdY_hqAig7KNqYz4JPFTkEvJQ8',
-    appId: '1:711538673552:ios:b9f51844fde2f2a5169515',
-    messagingSenderId: '711538673552',
-    projectId: 'manhattan-project-2ec9d',
-    storageBucket: 'manhattan-project-2ec9d.appspot.com',
-    iosClientId: '711538673552-365sig9jjpigmvpvet5l2e420bvg3300.apps.googleusercontent.com',
-    iosBundleId: 'com.example.manhattan',
   );
 }

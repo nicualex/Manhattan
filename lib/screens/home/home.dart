@@ -1,26 +1,41 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:manhattan/constants.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:manhattan/screens/home/cocktail_card.dart';
 
-class Home extends StatelessWidget {
 
-  final List dummyList = List.generate(1000, (index) {
-    return {
-      "id": index,
-      "title": "This is the title $index",
-      "subtitle": "This is the subtitle $index"
-    };
-  });
+class Home extends StatefulWidget {
+  const Home({Key? key}) : super(key: key);
+  @override
+  State<Home> createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
+  final CollectionReference _cocktails =
+  FirebaseFirestore.instance.collection('cocktails');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home stuff'),
+        title: Text(appName, style: Theme
+            .of(context)
+            .textTheme
+            .headline1,),
+        elevation: 15,
+        backgroundColor: Theme
+            .of(context)
+            .primaryColor,
+        shadowColor: Theme
+            .of(context)
+            .shadowColor,
         actions: <Widget>[
           IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.settings,
-              color: Colors.white,
+              //color: Colors.blue,
             ),
             onPressed: () {
               // do something
@@ -28,23 +43,34 @@ class Home extends StatelessWidget {
           )
         ],
       ),
-        body: SafeArea(
-            child: ListView.builder(
-              itemCount: dummyList.length,
-              itemBuilder: (context, index) =>
-                  Card(
-                    elevation: 6,
-                    margin: EdgeInsets.all(10),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: Text(dummyList[index]["id"].toString()),
-                        backgroundColor: Colors.purple,
-                      ),
-                      title: Text(dummyList[index]["title"]),
-                      subtitle: Text(dummyList[index]["subtitle"]),
-                      trailing: Icon(Icons.add_a_photo),
-                    ),
-                  ),
-            )));
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: StreamBuilder(
+          stream: _cocktails.snapshots(),
+          builder: (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+            if (streamSnapshot.hasData) {
+              return SafeArea(
+                  child: ListView.builder(
+                      itemCount: streamSnapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        final DocumentSnapshot documentSnapshot =
+                        streamSnapshot.data!.docs[index];
+                        print('Database image: ! ${documentSnapshot['picture']}');
+                        return CocktailCard(documentSnapshot);
+                      }
+                  )
+              );
+            } else {
+              return Center (
+                child: CircularProgressIndicator(
+                  color: Theme
+                      .of(context)
+                      .primaryColor,
+                ),
+              );
+            }
+          }
+      ),
+    );
   }
 }
+

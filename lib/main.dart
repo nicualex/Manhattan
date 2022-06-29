@@ -1,32 +1,60 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:manhattan/screens/connect/connect.dart';
 import 'package:manhattan/screens/home/home.dart';
 import 'package:manhattan/screens/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'firebase_options.dart';
+import 'package:manhattan/constants.dart';
 
-void main() => runApp(const MyApp());
+Future <void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Future <FirebaseApp> _fbApp =   Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+
+  MyApp({super.key});
+
+
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      color: Colors.lightBlue,
-      home: StreamBuilder<BluetoothState>(
-          stream: FlutterBlue.instance.state,
-          initialData: BluetoothState.unknown,
-          builder: (c, snapshot) {
-            final state = snapshot.data;
-            if (state == BluetoothState.on) {
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.purple,
+        backgroundColor: Colors.black,
+        shadowColor: Colors.white12,
+        fontFamily: 'Georgia',
+        cardColor: Colors.purple[900],
+        textTheme: const TextTheme(
+            bodyText2: TextStyle(fontFamily: 'Montserrat',color: Colors.white),
+            headline1: TextStyle(fontFamily: 'DancingScript',fontSize: 30.0,color: Colors.white),
+       ),
+      ),
+      home: FutureBuilder(
+          future: _fbApp,
+          builder: (context ,snapshot ) {
+            if (snapshot.hasError) {
+              print('You have an error ! ${snapshot.error.toString()}');
+              return const Text('Something went wrong');
+            } else if (snapshot.hasData) {
               return Home();
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
-            //return Connect(state: state);
-            return Home();
-
-          }),
+          }
+      )
     );
   }
 }
-
