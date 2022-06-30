@@ -1,4 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:manhattan/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -54,7 +55,6 @@ class _HomeState extends State<Home> {
                       itemBuilder: (context, index) {
                         final DocumentSnapshot documentSnapshot =
                         streamSnapshot.data!.docs[index];
-                        print('Database image: ! ${documentSnapshot['picture']}');
                         return CocktailCard(documentSnapshot);
                       }
                   )
@@ -72,5 +72,8 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
+
+  
 }
 

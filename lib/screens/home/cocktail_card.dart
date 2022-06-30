@@ -1,9 +1,11 @@
 import 'dart:html';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:firebase_image/firebase_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class CocktailCard extends StatelessWidget {
   DocumentSnapshot documentSnapshot;
@@ -11,9 +13,7 @@ class CocktailCard extends StatelessWidget {
   //Url imageCocktail = Uri.parse('graphics/generic_cocktail.png') as Url;
 
   CocktailCard(this.documentSnapshot, {super.key}) {
-    imageCocktail = documentSnapshot['picture'] ?? 'graphics/generic_cocktail.png';
-    //imageCocktail = 'graphics/generic_cocktail.png';
-
+    //imageCocktail = documentSnapshot['picture'] ?? 'graphics/generic_cocktail.png';
   }
 
   @override
@@ -42,15 +42,24 @@ class CocktailCard extends StatelessWidget {
                   children: <Widget> [
                     Expanded(
                        flex: 3,
-                        child: ClipRect(
+                          child: FutureBuilder (
+                            future: downloadURL(documentSnapshot['picture']),
+                            builder: (BuildContext context, AsyncSnapshot <String> snapshot) {
+                              if (snapshot.hasData) {
+                                print('Image URL -----> $snapshot');
+                                return ClipRect(
+                                  child: CachedNetworkImage(
+                                    imageUrl: snapshot.data!,
+                                    placeholder: (context, url) => const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) => const Icon(Icons.error_outline_sharp),
+                                  ),
+                                );
+                              }
+                              return const ClipRect();
+                            }
+                          )
                               //child: FadeInImage.memoryNetwork(
-                                child: FadeInImage.assetNetwork(
-                                placeholder: imageCocktail,
-                                image: FirebaseImage(imageCocktail),
-                                fit: BoxFit.fitHeight,
-                                alignment: Alignment.centerLeft,
-                              )
-                            ),
+                            //),
                     ),
                     Expanded( // middle column , name, descripiotns and all
                       flex:6,
@@ -98,4 +107,13 @@ class CocktailCard extends StatelessWidget {
       ),
               );
   }
+
+Future <String> downloadURL(String path) async {
+   //String imageUrl = await FirebaseStorage.instance.refFromURL(path).getDownloadURL();
+  //String imageUrl = await FirebaseStorage.instance.ref().child(path).getDownloadURL();
+  String imageUrl = await FirebaseStorage.instance.ref().child('generic_cockails.jpg').getDownloadURL();
+   print('Image URL -----> $imageUrl');
+   return imageUrl;
+}
+
 }

@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'firebase_options.dart';
 import 'package:manhattan/constants.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
   final Future <FirebaseApp> _fbApp =   Firebase.initializeApp(
   options: DefaultFirebaseOptions.currentPlatform,
   );
+
 
 
   MyApp({super.key});
