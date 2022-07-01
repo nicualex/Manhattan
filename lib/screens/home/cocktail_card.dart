@@ -1,11 +1,10 @@
-import 'dart:html';
-
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:firebase_image/firebase_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:manhattan/constants.dart';
 
 class CocktailCard extends StatelessWidget {
   DocumentSnapshot documentSnapshot;
@@ -26,8 +25,7 @@ class CocktailCard extends StatelessWidget {
           child: Container(
             //margin: const EdgeInsets.all(10) ,
             alignment: Alignment.centerLeft,
-            height: 300,
-              //alignment: Alignment.centerLeft,
+            height: cardHeight,
               decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -35,24 +33,34 @@ class CocktailCard extends StatelessWidget {
                     colors: [Colors.black , Theme.of(context).cardColor],
                   ),
                   borderRadius: const BorderRadius.all(
-                      Radius.circular(8.0)),
+                      Radius.circular(10.0)),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget> [
                     Expanded(
-                       flex: 3,
+                        //alignment: Alignment.centerLeft,
+                        flex:6,
                           child: FutureBuilder (
                             future: downloadURL(documentSnapshot['picture']),
                             builder: (BuildContext context, AsyncSnapshot <String> snapshot) {
                               if (snapshot.hasData) {
                                 print('Image URL -----> $snapshot');
                                 return ClipRect(
-                                  child: CachedNetworkImage(
-                                    imageUrl: snapshot.data!,
-                                    placeholder: (context, url) => const CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) => const Icon(Icons.error_outline_sharp),
-                                  ),
+                                  child:FittedBox (
+                                    alignment: Alignment.center,
+                                    child:
+                                    Image.network(
+                                      snapshot.data!,
+                                      fit: BoxFit.fitHeight,
+                                    ),
+                                    //width: 300,
+                                    //child: CachedNetworkImage(
+                                    //  imageUrl: snapshot.data!,
+                                    //  placeholder: (context, url) => const CircularProgressIndicator(),
+                                   //   errorWidget: (context, url, error) => const Icon(Icons.error_outline_sharp),
+                                    //  fit: BoxFit.fill,
+                                    ),
                                 );
                               }
                               return const ClipRect();
@@ -62,7 +70,7 @@ class CocktailCard extends StatelessWidget {
                             //),
                     ),
                     Expanded( // middle column , name, descripiotns and all
-                      flex:6,
+                      flex:7,
                       child: Column(
                           //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
@@ -109,9 +117,9 @@ class CocktailCard extends StatelessWidget {
   }
 
 Future <String> downloadURL(String path) async {
-   //String imageUrl = await FirebaseStorage.instance.refFromURL(path).getDownloadURL();
-  //String imageUrl = await FirebaseStorage.instance.ref().child(path).getDownloadURL();
+
   String imageUrl = await FirebaseStorage.instance.ref().child('generic_cockails.jpg').getDownloadURL();
+  //String imageUrl = await FirebaseStorage.instance.ref().child(path).getDownloadURL();
    print('Image URL -----> $imageUrl');
    return imageUrl;
 }
