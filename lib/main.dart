@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:manhattan/screens/connect/connect.dart';
 import 'package:manhattan/screens/home/home.dart';
@@ -6,25 +7,23 @@ import 'package:manhattan/screens/wrapper.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'firebase_options.dart';
 import 'package:manhattan/constants.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 Future <void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  //FirebaseDatabase.instance.setPersistenceEnabled(true);
+  // Pass all uncaught errors from the framework to Crashlytics.
+//  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   final Future <FirebaseApp> _fbApp =   Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
+      options: DefaultFirebaseOptions.currentPlatform,
   );
-
-
-
   MyApp({super.key});
-
 
 
   @override
@@ -45,6 +44,9 @@ class MyApp extends StatelessWidget {
       home: FutureBuilder(
           future: _fbApp,
           builder: (context ,snapshot ) {
+            //FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+            //FirebaseDatabase.instance.setPersistenceEnabled(true);
+
             if (snapshot.hasError) {
               print('You have an error ! ${snapshot.error.toString()}');
               return const Text('Something went wrong');

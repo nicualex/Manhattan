@@ -6,9 +6,18 @@ import 'package:firebase_image/firebase_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:manhattan/constants.dart';
 
+
+class FireStorageService extends ChangeNotifier {
+  FireStorageService ();
+  static Future <dynamic> loadImage(BuildContext context, String path) async {
+    return await  FirebaseStorage.instance.ref().child(path).getDownloadURL();
+  }
+}
+
 class CocktailCard extends StatelessWidget {
   DocumentSnapshot documentSnapshot;
-  String imageCocktail='';
+  String imageCocktail = '';
+
   //Url imageCocktail = Uri.parse('graphics/generic_cocktail.png') as Url;
 
   CocktailCard(this.documentSnapshot, {super.key}) {
@@ -20,108 +29,138 @@ class CocktailCard extends StatelessWidget {
     return Card(
       elevation: 12,
       margin: const EdgeInsets.all(10),
-      child: InkWell (
+      child: InkWell(
         //onTap: () => do something,
           child: Container(
             //margin: const EdgeInsets.all(10) ,
             alignment: Alignment.centerLeft,
             height: cardHeight,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Colors.black , Theme.of(context).cardColor],
-                  ),
-                  borderRadius: const BorderRadius.all(
-                      Radius.circular(10.0)),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [Colors.black, Theme
+                    .of(context)
+                    .cardColor
+                ],
               ),
-              child: Row(
+              borderRadius: const BorderRadius.all(
+                  Radius.circular(10.0)),
+            ),
+            child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget> [
-                    Expanded(
-                        //alignment: Alignment.centerLeft,
-                        flex:6,
-                          child: FutureBuilder (
-                            future: downloadURL(documentSnapshot['picture']),
-                            builder: (BuildContext context, AsyncSnapshot <String> snapshot) {
-                              if (snapshot.hasData) {
-                                print('Image URL -----> $snapshot');
-                                return ClipRect(
-                                  child:FittedBox (
-                                    alignment: Alignment.center,
-                                    child:
-                                    Image.network(
-                                      snapshot.data!,
-                                      fit: BoxFit.fitHeight,
-                                    ),
-                                    //width: 300,
-                                    //child: CachedNetworkImage(
-                                    //  imageUrl: snapshot.data!,
-                                    //  placeholder: (context, url) => const CircularProgressIndicator(),
-                                   //   errorWidget: (context, url, error) => const Icon(Icons.error_outline_sharp),
-                                    //  fit: BoxFit.fill,
-                                    ),
-                                );
-                              }
-                              return const ClipRect();
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Container (
+                      //flex: 6,
+                    height: cardHeight,
+                    width: 250,
+                      child: FutureBuilder(
+                          future: downloadImage(context,documentSnapshot['picture']),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.done) {
+                              return FittedBox(
+                                alignment: Alignment.center,
+                                clipBehavior: Clip.hardEdge,
+                                fit:BoxFit.cover,
+                                child:snapshot.data,
+                              );
                             }
-                          )
-                              //child: FadeInImage.memoryNetwork(
-                            //),
-                    ),
-                    Expanded( // middle column , name, descripiotns and all
-                      flex:7,
-                      child: Column(
-                          //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Expanded(
-                                flex:2,
-                                child: Padding(padding: const EdgeInsets.all(8.0),
-                                  child: Text( documentSnapshot['name'],
-                                    style: Theme
-                                        .of(context)
-                                        .textTheme
-                                        .headline1,),
-                                ),
-                            ),
-                            Expanded (
-                              flex: 7,
-                                child: Padding(padding:const EdgeInsets.all(16.0),
-                                  child: Text(
-                                    documentSnapshot['description'],
-                                    softWrap: false,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 6,
-                                  ),
-                                ),
-                            ),
-                            Expanded(
-                              flex:1,
-                              child: Text(documentSnapshot['name']),
-                            ),
-
-                          ],
+                            return const FittedBox();
+                          }
+                      )
+                  ),
+                  Expanded( // middle column , name, descriptions and all
+                    flex: 7,
+                    child: Column(
+                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Padding(padding: const EdgeInsets.all(8.0),
+                            child: Text(documentSnapshot['name'],
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .headline1,),
+                          ),
                         ),
+                        Expanded(
+                          flex: 7,
+                          child: Padding(padding: const EdgeInsets.all(16.0),
+                            child: Text(
+                              documentSnapshot['description'],
+                              softWrap: false,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 6,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Text(documentSnapshot['name']),
+                        ),
+
+                      ],
                     ),
-                    Expanded(
-                      flex:1,
-                      child: Container(),
-                    )
-                  ]
-              ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(),
+                  )
+                ]
+            ),
           )
 
-                         // children:[Text(documentSnapshot['name']),]
+        // children:[Text(documentSnapshot['name']),]
       ),
-              );
+    );
   }
 
-Future <String> downloadURL(String path) async {
+  Future <Widget> downloadImage(BuildContext context, String path) async {
+    //Image cocktailImage;
+    Widget cocktailImage;
+    cocktailImage = Image.asset('');
 
-  String imageUrl = await FirebaseStorage.instance.ref().child('generic_cockails.jpg').getDownloadURL();
-  //String imageUrl = await FirebaseStorage.instance.ref().child(path).getDownloadURL();
-   print('Image URL -----> $imageUrl');
-   return imageUrl;
+    await FirebaseStorageService.loadImage(context, path).then((value) {
+      print ('Load Image ---------- $value');
+      //cocktailImage = Image.network(
+      //  value.toString(),
+      //  fit: BoxFit.fitHeight,
+      //);
+      cocktailImage = CachedNetworkImage(
+          imageUrl: value.toString(),
+          placeholder: (context, url) => const CircularProgressIndicator(),
+          errorWidget: (context, url, error) => const Icon(Icons.error_outline_sharp),
+          fit: BoxFit.fitHeight,
+      );
+    });
+    //print('Image URL -----> $imageUrl');
+    return cocktailImage;
+  }
 }
 
+//FadeInImage.memoryNetwork(
+//placeholder: kTransparentImage,
+//image: snapshot.data!,
+//Image.network(
+// snapshot.data!,
+// fit: BoxFit.fitHeight,
+//),
+//width: 300,
+//child: CachedNetworkImage(
+//  imageUrl: snapshot.data!,//
+//  placeholder: (context, url) => const CircularProgressIndicator(),
+//   errorWidget: (context, url, error) => const Icon(Icons.error_outline_sharp),
+//  fit: BoxFit.fill,
+
+
+class FirebaseStorageService extends ChangeNotifier {
+  FirebaseStorageService ();
+  static Future <dynamic> loadImage(BuildContext context, String path) async {
+    String imageUrl = await FirebaseStorage.instance.ref().child(path).getDownloadURL();
+    print ('Load URL ---------- $imageUrl');
+    return imageUrl.toString();
+  }
 }
+
