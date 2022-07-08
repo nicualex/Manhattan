@@ -1,3 +1,4 @@
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -98,9 +99,18 @@ class CocktailCard extends StatelessWidget {
                         ),
                         Expanded(
                           flex: 1,
-                          child: Text(documentSnapshot['name']),
+                          child:ListView.builder(
+                                itemCount: documentSnapshot['ingredients'].length,
+                                itemBuilder: (context,index) {
+                                  Map m = documentSnapshot['ingredients'][index];
+                                  if (m.isNotEmpty) {
+                                  print(m.keys.toString()); }
+                                  return ListTile(
+                                    title: Text(m.toString()),
+                                  );
+                                  }
+                                  ),
                         ),
-
                       ],
                     ),
                   ),
@@ -123,7 +133,7 @@ class CocktailCard extends StatelessWidget {
     cocktailImage = Image.asset('');
 
     await FirebaseStorageService.loadImage(context, path).then((value) {
-      print ('Load Image ---------- $value');
+      //print ('Load Image ---------- $value');
       //cocktailImage = Image.network(
       //  value.toString(),
       //  fit: BoxFit.fitHeight,
@@ -159,7 +169,7 @@ class FirebaseStorageService extends ChangeNotifier {
   FirebaseStorageService ();
   static Future <dynamic> loadImage(BuildContext context, String path) async {
     String imageUrl = await FirebaseStorage.instance.ref().child(path).getDownloadURL();
-    print ('Load URL ---------- $imageUrl');
+    //print ('Load URL ---------- $imageUrl');
     return imageUrl.toString();
   }
 }
