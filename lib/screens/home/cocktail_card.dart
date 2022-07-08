@@ -85,7 +85,7 @@ class CocktailCard extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          flex: 7,
+                          flex: 5,
                           child: Padding(padding: const EdgeInsets.all(16.0),
                             child: Text(
                               documentSnapshot['description'],
@@ -95,19 +95,46 @@ class CocktailCard extends StatelessWidget {
                             ),
                           ),
                         ),
+
                         Expanded(
-                          flex: 1,
-                          child:ListView.builder(
-                                itemCount: documentSnapshot['ingredients'].length,
-                                itemBuilder: (context,index) {
-                                  Map m = documentSnapshot['ingredients'][index];
-                                  if (m.isNotEmpty) {
-                                  print(m.keys.toString()); }
-                                  return ListTile(
-                                    title: Text(m.toString()),
-                                  );
-                                  }
+                          flex: 3,
+                          //constraints: BoxConstraints(minHeight: 60,minWidth: 50),
+                          //child: Text("Lower part"),
+                          child:Row (
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Column(
+                                //color: Colors.blue,
+                                //constraints: const BoxConstraints.,
+                                children: [ GridView.builder(
+                                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
+                                      crossAxisCount: 2,
+                                      //childAspectRatio: 3/2,
+                                      crossAxisSpacing: 10,
+                                      mainAxisSpacing: 10,
+                                    ),
+                                    itemBuilder: (context,index) {
+                                      Map <String,dynamic> m = documentSnapshot['ingredients'];
+                                      var keysList = m.keys.toList();
+                                      String str = "${keysList[index]}  ${m[keysList[index]].toString()}";
+                                      print(str);
+                                      return GridTile(
+                                        header: const GridTileBar (
+                                          title: Text("Ingredients"),
+                                        ) ,
+                                        child: Text(str),
+                                      );
+                                    }
                                   ),
+                                ],
+                              ),
+                              ConstrainedBox(
+                                constraints: BoxConstraints(minHeight: 30,minWidth: 50),
+                                child: Text("for button"),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
