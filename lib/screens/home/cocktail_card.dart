@@ -34,6 +34,7 @@ class CocktailCard extends StatelessWidget {
             //margin: const EdgeInsets.all(10) ,
             alignment: Alignment.centerLeft,
             height: cardHeight,
+            width: double.infinity,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
@@ -50,8 +51,7 @@ class CocktailCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  Container (
-                      //flex: 6,
+                  Container ( // for cocktail picture
                     height: cardHeight,
                     width: 250,
                       child: FutureBuilder(
@@ -69,13 +69,21 @@ class CocktailCard extends StatelessWidget {
                           }
                       )
                   ),
-                  Expanded( // middle column , name, descriptions and all
-                    flex: 7,
+                  Expanded( // middle section , wide column , name, descriptions and all
+                    flex: 1,
+                    //height: cardHeight,
+                    //margin: EdgeInsets.all(20.0),
+                    //width: 350.0,
+                    //height: double.infinity,
+                    //color: Colors.blue,
                     child: Column(
                       //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Expanded(
-                          flex: 2,
+                        Container(
+                          //flex: 2,
+                          margin: EdgeInsets.all(5.0),
+                          width: double.infinity,
+                          height: 50,
                           child: Padding(padding: const EdgeInsets.all(8.0),
                             child: Text(documentSnapshot['name'],
                               style: Theme
@@ -85,7 +93,7 @@ class CocktailCard extends StatelessWidget {
                           ),
                         ),
                         Expanded(
-                          flex: 5,
+                          //flex: 5,
                           child: Padding(padding: const EdgeInsets.all(16.0),
                             child: Text(
                               documentSnapshot['description'],
@@ -95,25 +103,26 @@ class CocktailCard extends StatelessWidget {
                             ),
                           ),
                         ),
-
-                        Expanded(
-                          flex: 3,
-                          //constraints: BoxConstraints(minHeight: 60,minWidth: 50),
-                          //child: Text("Lower part"),
-                          child:Row (
+                          Row (
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                //color: Colors.blue,
-                                //constraints: const BoxConstraints.,
-                                children: [ GridView.builder(
+                              Container(
+                                //mainAxisAlignment: MainAxisAlignment.start,
+                                //mainAxisSize: MainAxisSize.min,
+                                //child: const Text ("Ingredients"),
+                                height: 30.0,
+                                width: 200,
+                                //width: double.infinity,
+                                //width: double.infinity,
+                                child:  GridView.builder(
                                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
                                       crossAxisCount: 2,
                                       //childAspectRatio: 3/2,
                                       crossAxisSpacing: 10,
                                       mainAxisSpacing: 10,
                                     ),
+                                    itemCount: documentSnapshot['ingredients'].length,
                                     itemBuilder: (context,index) {
                                       Map <String,dynamic> m = documentSnapshot['ingredients'];
                                       var keysList = m.keys.toList();
@@ -127,27 +136,20 @@ class CocktailCard extends StatelessWidget {
                                       );
                                     }
                                   ),
-                                ],
                               ),
-                              ConstrainedBox(
-                                constraints: BoxConstraints(minHeight: 30,minWidth: 50),
+                              Container(
+                                alignment: Alignment.center,
+                                width: 50.0,
                                 child: Text("for button"),
                               ),
                             ],
                           ),
-                        ),
                       ],
                     ),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Container(),
-                  )
                 ]
             ),
           )
-
-        // children:[Text(documentSnapshot['name']),]
       ),
     );
   }
