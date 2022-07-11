@@ -37,7 +37,8 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Georgia',
         cardColor: Colors.purple[900],
         textTheme: const TextTheme(
-            bodyText2: TextStyle(fontFamily: 'Montserrat',color: Colors.white),
+            bodyText1: TextStyle(fontFamily: 'Montserrat',fontSize:12.0 , color: Colors.white),
+            bodyText2: TextStyle(fontFamily: 'Montserrat',fontSize:16.0 , color: Colors.white),
             headline1: TextStyle(fontFamily: 'DancingScript',fontSize: 30.0,color: Colors.white),
        ),
       ),
