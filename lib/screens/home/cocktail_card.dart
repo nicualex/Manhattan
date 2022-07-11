@@ -103,7 +103,7 @@ class CocktailCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                          Row (
+                          Row ( //ingredients and mix button
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -111,27 +111,31 @@ class CocktailCard extends StatelessWidget {
                                 //mainAxisAlignment: MainAxisAlignment.start,
                                 //mainAxisSize: MainAxisSize.min,
                                 //child: const Text ("Ingredients"),
-                                height: 30.0,
-                                width: 200,
+                                height: 120.0,
+                                width: 250,
+                                alignment: Alignment.center,
                                 //width: double.infinity,
                                 //width: double.infinity,
                                 child:  GridView.builder(
                                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount (
                                       crossAxisCount: 2,
-                                      //childAspectRatio: 3/2,
-                                      crossAxisSpacing: 10,
-                                      mainAxisSpacing: 10,
+                                      //childAspectRatio: 60,
+                                      //crossAxisSpacing: 1,
+                                      //mainAxisSpacing: 0,
+                                      //mainAxisExtent: 120,
                                     ),
+                                    shrinkWrap: true,
+                                    padding: EdgeInsets.zero,
                                     itemCount: documentSnapshot['ingredients'].length,
                                     itemBuilder: (context,index) {
                                       Map <String,dynamic> m = documentSnapshot['ingredients'];
                                       var keysList = m.keys.toList();
                                       String str = "${keysList[index]}  ${m[keysList[index]].toString()}";
                                       print(str);
-                                      return GridTile(
-                                        header: const GridTileBar (
-                                          title: Text("Ingredients"),
-                                        ) ,
+                                      return Container(
+                                        //height: 10,
+                                        width: 120,
+                                        alignment: Alignment.center,
                                         child: Text(str),
                                       );
                                     }
