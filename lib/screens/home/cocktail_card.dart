@@ -45,7 +45,7 @@ class CocktailCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
+                SizedBox(
                     // for cocktail picture
                     height: cardHeight,
                     width: 239,
@@ -87,8 +87,7 @@ class CocktailCard extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(19.0, 3.0, 19.0, 9.0),
                         child: Text(
                           documentSnapshot['description'],
-                          softWrap: false,
-                          //softWrap: true,
+                          softWrap: true,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 6,
                         ),
@@ -111,22 +110,27 @@ class CocktailCard extends StatelessWidget {
                         child: Row( //ingredients 
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Expanded(
+                              flex: 1,
                               child: Container(
                                 //flex: 8,
                                 alignment: Alignment.topLeft,
                                 padding: const EdgeInsets.fromLTRB(19,1,19,3),
                                 //color: Colors.blue,
                                 child: GridView.builder(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 21,
-                                      //crossAxisSpacing: 15,
-                                      //mainAxisSpacing: 1,
+                                            crossAxisCount: 2,
+                                            //childAspectRatio: 6,
+                                            crossAxisSpacing: 6,
+                                            mainAxisSpacing: 1,
+                                            mainAxisExtent: 26,
                                     ),
-                                    //shrinkWrap: true,
+
                                     //padding: EdgeInsets.all(10),
                                     itemCount: documentSnapshot['ingredients'].length,
                                     itemBuilder: (context, index) {
@@ -135,19 +139,31 @@ class CocktailCard extends StatelessWidget {
                                       var keysList = m.keys.toList();
                                       String str =
                                           //"${keysList[index]}  ${m[keysList[index]].toString()}";
-                                          "${keysList[index]}";
+                                          "  ${keysList[index]}";
                                       //print(str);
                                       return Container(
-                                        height: 3,
+                                        //height: 3,
                                         //padding: const EdgeInsets.all(1),
-                                        alignment: Alignment.topLeft,
+                                        alignment: Alignment.centerLeft,
                                         //color: Colors.deepOrange,
                                         child: Padding(
                                           padding: const EdgeInsets.all(3),
-                                          child:Text(str,
-                                          textAlign: TextAlign.left,
-                                          style: Theme.of(context).textTheme.bodyText1,
-                                        ),
+                                          child:Row(
+                                            children:[
+                                              const Icon(Icons.battery_full,
+                                              size: 16,
+                                              color: Colors.lightBlueAccent,),
+                                              Expanded (
+                                                child: Text(str,
+                                                    textAlign: TextAlign.left,
+                                                    overflow: TextOverflow.fade,
+                                                    softWrap: false,
+                                                    maxLines: 1,
+                                                    style: Theme.of(context).textTheme.bodyText1,
+                                              ),
+                                              ),
+                                          ],
+                                          ),
                                         ),
                                       );
                                     }),
