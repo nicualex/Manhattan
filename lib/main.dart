@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
   final Future <FirebaseApp> _fbApp =   Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
   );
+  //FirebaseDatabase.instance.setPersistenceEnabled(true);
   MyApp({super.key});
 
 
