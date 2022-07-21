@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:manhattan/constants.dart';
-import 'package:manhattan/screens/home/mixing_page.dart';
 
 class FireStorageService extends ChangeNotifier {
   FireStorageService();
@@ -12,21 +11,45 @@ class FireStorageService extends ChangeNotifier {
   }
 }
 
-class CocktailCard extends StatelessWidget {
+class MixingPage extends StatelessWidget {
   DocumentSnapshot documentSnapshot;
   String imageCocktail = '';
-  CocktailCard(this.documentSnapshot, {super.key}) ;
+  MixingPage(this.documentSnapshot, {super.key}) ;
+
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 12,
-      margin: const EdgeInsets.all(10),
-      child: InkWell(
-          onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => MixingPage(documentSnapshot)));
+    return Scaffold(//Card(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(icon: const Icon(Icons.arrow_back),
+          onPressed:() => Navigator.pop(context,false),
+        ),
+        title: Text(appName, style: Theme
+            .of(context)
+            .textTheme
+            .headline1,),
+        elevation: 15,
+        backgroundColor: Theme
+            .of(context)
+            .primaryColor,
+        shadowColor: Theme
+            .of(context)
+            .shadowColor,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+              //color: Colors.blue,
+            ),
+            onPressed: () {
+              // do something
             },
-          child: Container(
+          )
+        ],
+      ),
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Container(
             //margin: const EdgeInsets.all(10) ,
             alignment: Alignment.centerLeft,
             height: cardHeight,
@@ -67,10 +90,7 @@ class CocktailCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                       Container( //name
-                        //flex: 2,
                         padding: const EdgeInsets.all(3.0),
-                        //width: double.infinity,
-                        //height: 55,
                         alignment: Alignment.topCenter,
                         child: Padding(padding: const EdgeInsets.all(3.0),
                           child: Text(
@@ -113,37 +133,29 @@ class CocktailCard extends StatelessWidget {
                             Expanded(
                               flex: 1,
                               child: Container(
-                                //flex: 8,
                                 alignment: Alignment.topLeft,
                                 padding: const EdgeInsets.fromLTRB(19,1,19,3),
-                                //color: Colors.blue,
                                 child: GridView.builder(
                                     shrinkWrap: true,
                                     physics: const NeverScrollableScrollPhysics(),
                                     gridDelegate:
                                         const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 2,
-                                            //childAspectRatio: 6,
                                             crossAxisSpacing: 6,
                                             mainAxisSpacing: 1,
                                             mainAxisExtent: 26,
                                     ),
-
-                                    //padding: EdgeInsets.all(10),
                                     itemCount: documentSnapshot['ingredients'].length,
                                     itemBuilder: (context, index) {
                                       Map<String, dynamic> m =
                                           documentSnapshot['ingredients'];
                                       var keysList = m.keys.toList();
                                       String str =
-                                          //"${keysList[index]}  ${m[keysList[index]].toString()}";
-                                          "  ${keysList[index]}";
+                                          "${keysList[index]} :  ${m[keysList[index]].toString()} ml";
+                                          //"  ${keysList[index]}";
                                       //print(str);
                                       return Container(
-                                        //height: 3,
-                                        //padding: const EdgeInsets.all(1),
                                         alignment: Alignment.centerLeft,
-                                        //color: Colors.deepOrange,
                                         child: Padding(
                                           padding: const EdgeInsets.all(3),
                                           child:Row(
@@ -167,12 +179,6 @@ class CocktailCard extends StatelessWidget {
                                     }),
                               ),
                             ),
-                            /*Container(
-                                    alignment: Alignment.center,
-                                    width: 50.0,
-                                    color:Colors.amber,
-                                    child: Text("for button"),
-                                  ),*/
                           ],
                         ),
                       ),
@@ -180,16 +186,14 @@ class CocktailCard extends StatelessWidget {
                 ),
           ),
               ]),
-      )),
+      ),
     );
   }
 
   Future<Widget> downloadImage(BuildContext context, String path) async {
-    //Image cocktailImage;
     Widget cocktailImage;
     cocktailImage = Image.asset('');
     await FirebaseStorageService.loadImage(context, path).then((value) {
-
       cocktailImage = CachedNetworkImage(
         imageUrl: value.toString(),
         placeholder: (context, url) => const Center(
@@ -209,20 +213,6 @@ class CocktailCard extends StatelessWidget {
     return cocktailImage;
   }
 }
-
-//FadeInImage.memoryNetwork(
-//placeholder: kTransparentImage,
-//image: snapshot.data!,
-//Image.network(
-// snapshot.data!,
-// fit: BoxFit.fitHeight,
-//),
-//width: 300,
-//child: CachedNetworkImage(
-//  imageUrl: snapshot.data!,//
-//  placeholder: (context, url) => const CircularProgressIndicator(),
-//   errorWidget: (context, url, error) => const Icon(Icons.error_outline_sharp),
-//  fit: BoxFit.fill,
 
 class FirebaseStorageService extends ChangeNotifier {
   FirebaseStorageService();

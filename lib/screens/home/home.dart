@@ -21,6 +21,10 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: IconButton(icon: const Icon(Icons.ac_unit_sharp),
+        onPressed:() {},
+        ),
         title: Text(appName, style: Theme
             .of(context)
             .textTheme
