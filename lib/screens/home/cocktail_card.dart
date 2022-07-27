@@ -65,6 +65,7 @@ class CocktailCard extends StatelessWidget {
                   child:Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                       Container( //name
                         //flex: 2,
